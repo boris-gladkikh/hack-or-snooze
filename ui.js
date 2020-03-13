@@ -7,6 +7,7 @@
   const $ownStories = $("#my-articles");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
+  const $favArticles = $("#favorited-articles");
 
     // global storyList variable
     let storyList = null;
@@ -171,6 +172,7 @@ $(async function() {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
+      <i class="star far fa-star"></i>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
@@ -234,11 +236,50 @@ $(async function() {
       localStorage.setItem("username", currentUser.username);
     }
   }
-});
+
+
+//ui function
+function createStoryObjectFromForm() {
+  let newStory = {};
+  newStory.author = $("#author").val();
+  newStory.title = $("#title").val();
+  newStory.url = $("#url").val();
+  return newStory;
+}
 
 //add functionality to submit button of submit form (for stories)
 
-$("#submit-button").on("click",  function(){
-  let newStory = createStoryObject()
-  StoryList.addStory(currentUser,newStory)
+$("#submit-form").on("submit",  function(){
+  event.preventDefault();
+  let newStory = createStoryObjectFromForm();
+ StoryList.addStory(currentUser,newStory);
+ let prependedLi = generateStoryHTML(newStory);
+ $allStoriesList.prepend(prependedLi);
 })
+
+//added functionslity to favorite link in nac bar;
+
+$("#favorites-link").on("click", function(){
+  $favArticles.toggle();
+  $allStoriesList.toggle();
+})
+
+//event listener for star click
+
+$allStoriesList.on("click", ".star", function(event){
+  if ($(event.target).hasClass("far")){
+    $(event.target).addClass("fas");
+    $(event.target).removeClass("far");
+  } else {
+    $(event.target).addClass("far");
+    $(event.target).removeClass("fas");
+  }
+
+  
+
+ 
+})
+
+});
+
+function checkForStar(event)

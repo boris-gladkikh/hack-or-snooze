@@ -46,7 +46,7 @@ class StoryList {
 
   static async addStory(user, newStory) {
     // console.log("we are finally testing");
-    let storyUrl = "https://hack-or-snooze-v3.herokuapp.com/stories";
+    const storyUrl = `${BASE_URL}/stories`;
     
 
  
@@ -61,7 +61,7 @@ class StoryList {
       let {story} = responsePostStory.data;
 
       let createdStory = {story};
-      console.log("this is our story we created ", createdStory);
+      // console.log("this is our story we created ", createdStory);
 
 
 
@@ -117,6 +117,27 @@ class User {
 
     return newUser;
   }
+
+  static async addFavorite(user,storyId) {
+    let favURL = `${BASE_URL}/users/${user.username}/favorites/${storyId}`
+    const response = await axios.post(favURL,
+      { token: user.loginToken
+
+      });
+
+      let favoritesObject = response.data.users.favorites;
+
+      console.log("this is our favorites object",favoritesObject);
+ 
+    return favoritesObject;  
+
+  }
+
+  unfavorite() {
+
+  }
+
+
 
   /* Login in user and return user instance.
 
@@ -195,12 +216,4 @@ class Story {
     this.createdAt = storyObj.createdAt;
     this.updatedAt = storyObj.updatedAt;
   }
-}
-
-function createStoryObject() {
-  let newStory = {};
-  newStory.author = $("#author").val();
-  newStory.title = $("#title").val();
-  newStory.url = $("#url").val();
-  return newStory;
 }
