@@ -44,19 +44,17 @@ class StoryList {
    * Returns the new story object
    */
 
-  async addStory(user, newStory) {
-    console.log("we are finally testing");
+  static async addStory(user, newStory) {
+    // console.log("we are finally testing");
     let storyUrl = "https://hack-or-snooze-v3.herokuapp.com/stories";
     
 
  
     let responsePostStory = await axios.post(
       storyUrl,
-      { params: {
-          token: user.loginToken,
+      { token: user.loginToken,
           story: newStory
-        }
-      });
+        });
 
    
 

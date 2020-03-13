@@ -238,6 +238,6 @@ $(async function() {
 
 //add functionality to submit button of submit form (for stories)
 
-$submitForm.on("click", ()=>{
+$("#submit-button").on("click",  function(){
   StoryList.addStory(currentUser,createStoryObject)
 })
