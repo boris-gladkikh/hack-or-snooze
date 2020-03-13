@@ -1,4 +1,3 @@
-$(async function() {
   // cache some selectors we'll be using quite a bit
   const $allStoriesList = $("#all-articles-list");
   const $submitForm = $("#submit-form");
@@ -9,11 +8,20 @@ $(async function() {
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
 
-  // global storyList variable
-  let storyList = null;
+    // global storyList variable
+    let storyList = null;
 
-  // global currentUser variable
-  let currentUser = null;
+    // global currentUser variable
+    let currentUser = null;
+
+$(async function() {
+
+//on initial log-in
+  $(".nav-bar-on-login").hide();
+
+
+
+
 
   await checkIfLoggedIn();
 
@@ -35,7 +43,10 @@ $(async function() {
     currentUser = userInstance;
     syncCurrentUserToLocalStorage();
     loginAndSubmitForm();
-  });
+    
+  }
+  
+  );
 
   /**
    * Event listener for signing up.
@@ -181,14 +192,23 @@ $(async function() {
       $filteredArticles,
       $ownStories,
       $loginForm,
-      $createAccountForm
+      $createAccountForm,
+
     ];
     elementsArr.forEach($elem => $elem.hide());
   }
 
+  //added functionatity to show user name when logged in
+
   function showNavForLoggedInUser() {
     $navLogin.hide();
     $navLogOut.show();
+    $(".nav-bar-on-login").show();
+    $("#nav-welcome").text("Welcome, " + currentUser.name).show();
+
+    $("#submit-form-activate").on("click",function(){
+      $submitForm.toggle();
+    })
   }
 
   /* simple function to pull the hostname from a URL */
@@ -215,3 +235,9 @@ $(async function() {
     }
   }
 });
+
+//add functionality to submit button of submit form (for stories)
+
+$submitForm.on("click", ()=>{
+  StoryList.addStory(currentUser,createStoryObject)
+})

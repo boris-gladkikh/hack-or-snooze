@@ -24,6 +24,7 @@ class StoryList {
   // class directly. Why doesn't it make sense for getStories to be an instance method?
 
   static async getStories() {
+    // console.log("this is ", getStories)
     // query the /stories endpoint (no auth required)
     const response = await axios.get(`${BASE_URL}/stories`);
 
@@ -44,9 +45,32 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    // TODO - Implement this functions!
-    // this function should return the newly created story so it can be used in
-    // the script.js file where it will be appended to the DOM
+    console.log("we are finally testing");
+    let storyUrl = "https://hack-or-snooze-v3.herokuapp.com/stories";
+    
+
+ 
+    let responsePostStory = await axios.post(
+      storyUrl,
+      { params: {
+          token: user.loginToken,
+          story: newStory
+        }
+      });
+
+   
+
+      let {story} = responsePostStory.data;
+
+      let createdStory = {story};
+      console.log("this is our story we created ", createdStory);
+
+
+
+    
+    user.ownStories.push(createdStory);
+    return createdStory;
+   
   }
 }
 
@@ -173,4 +197,12 @@ class Story {
     this.createdAt = storyObj.createdAt;
     this.updatedAt = storyObj.updatedAt;
   }
+}
+
+function createStoryObject() {
+  let newStory = {};
+  newStory.author = $("#author").val();
+  newStory.title = $("#title").val();
+  newStory.url = $("#url").val();
+  return newStory;
 }
